@@ -1,0 +1,72 @@
+[
+  {
+    "date":"23.02.2015",
+    "day": "Monday",
+    "menu": [
+      {
+        "items": [0,0,0,0],
+        "ordered":0
+      },
+      {
+        "items": [1,1,1,1],
+        "ordered":0
+      }
+    ]
+  },
+  {
+    "date":"24.02.2015",
+    "day": "Tuesday",
+    "menu": [
+      {
+        "items": [0,0,0,0],
+        "ordered":0
+      },
+      {
+        "items": [1,1,1,1],
+        "ordered":0
+      }
+    ]
+  },
+  {
+    "date":"25.02.2015",
+    "day": "Wednesday",
+    "menu": [
+      {
+        "items": [0,0,0,0],
+        "ordered":0
+      },
+      {
+        "items": [1,1,1,1],
+        "ordered":0
+      }
+    ]
+  },
+  {
+    "date":"26.02.2015",
+    "day": "Thursday",
+    "menu": [
+      {
+        "items": [0,0,0,0],
+        "ordered":0
+      },
+      {
+        "items": [1,1,1,1],
+        "ordered":0
+      }
+    ]
+  },
+  {
+    "date":"27.02.2015",
+    "day": "Friday",
+    "menu": [
+      {
+        "items": [0,0,0,0],
+        "ordered":0
+      },
+      {
+        "items": [1,1,1,1],
+        "ordered":0
+      }
+    ]
+  }
+]
