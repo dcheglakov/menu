@@ -2,3 +2,4 @@
 *.codekit
 
 .idea/*
+/.project

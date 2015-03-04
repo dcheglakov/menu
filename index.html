@@ -15,11 +15,12 @@
     <body ng-app="OldCityMenu">
         <div class="container-fluid" ng-controller="WeekMenuCtrl">
             <div class="row">
-                <accordion class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12" ng-repeat="dayItems in weekItems">
-                    <accordion-group class="menu">
+                <accordion class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12"
+                        close-others="true">
+                    <accordion-group class="menu" is-open="dayItems.isOpen" ng-repeat="dayItems in weekItems">
                         <accordion-heading>
                             {{dayItems.day}} <small>{{dayItems.date}}</small>
-                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': dayItems.isOpen, 'glyphicon-chevron-right': !dayItems.isOpen}"></i>
                         </accordion-heading>
                         <div class="col-md-6 col-sm-12 col-xs-12 price-list" ng-repeat="price in menuPrices">
                             <h2 class="bg-warning">{{price}} <small>₴</small></h2>

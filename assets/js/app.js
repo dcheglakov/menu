@@ -25,11 +25,12 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
 
         $http.get('sample_menu.json')
              .then(function(res){
-                $scope.weekItems = res.data;
+                var dayIndex = (new Date()).getDay();
+                $scope.weekItems.length = 0;
+                angular.extend($scope.weekItems, res.data);
+                $scope.weekItems[dayIndex-1].isOpen = true;
               });
       });
-
-
 
 
 
