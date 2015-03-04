@@ -14,9 +14,9 @@
     </head>
     <body ng-app="OldCityMenu">
         <div class="container-fluid" ng-controller="WeekMenuCtrl">
-            <div class="row" ng-repeat="dayItems in weekItems">
-                <div class="menu col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
-                    <h2 class="bg-info">{{dayItems.day}} <small>{{dayItems.date}}</small></h2>
+            <accordion class="row" ng-repeat="dayItems in weekItems">
+                <accordion-group class="menu col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                    <accordion-heading>{{dayItems.day}} <small>{{dayItems.date}}</small></accordion-heading>
                     <div class="col-md-6 col-sm-12 col-xs-12 price-list" ng-repeat="price in menuPrices">
                         <h2 class="bg-warning">{{price}} <small>₴</small></h2>
                             <!-- <input type="number" min="0" max="100" ng-model="dayItems.menu[$index].ordered" maxlength="2" style="width:50px;" required> -->
@@ -24,8 +24,8 @@
                             <li ng-repeat="itemId in dayItems.menu[$index].items track by $index">{{menuItems[$index][itemId]}}</li>
                         </ol>
                     </div>
-                </div>
-            </div>
+                </accordion-group>
+            </accordion>
         </div>
     </body>
 </html>
