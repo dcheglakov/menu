@@ -29,6 +29,14 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
                 $scope.weekItems.length = 0;
                 angular.extend($scope.weekItems, res.data);
                 $scope.weekItems[dayIndex-1].isOpen = true;
+                var d = new Date();
+                var today = new Date(d.getFullYear(), d.getMonth(), d.getDay());
+
+                angular.forEach($scope.weekItems, function(value, key){
+                  var date = new Date(today);
+                  date.setDate(today.getDate() - today.getDay() + 1 + key);
+                  value.date = [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('.');
+                });
               });
       });
 
