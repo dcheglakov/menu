@@ -1,7 +1,7 @@
 body {
 	font: 18px 'Ubuntu Condensed', sans-serif;
 	padding: 10px;
-	background: #1e82c0 url("/assets/img/bg.jpg") fixed
+	background: #1e82c0 url('/assets/img/bg.jpg') fixed
 }
 
 h2 {
