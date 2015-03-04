@@ -41,30 +41,29 @@
                         <accordion-heading>
                             {{dayItems.day}} <small>{{dayItems.date}}</small>
                         </accordion-heading>
-                        <div class="col-12 price-list" ng-repeat="price in menuPrices">
+                        <div class="col-12 price-list" ng-repeat="dayMenuItem in dayItems.menu">
                             <h2 class="bg-warning">
                                 <a href="#" role="button" class="btn btn-success btn-sm" aria-label="Plus"
-                                        ng-click="dayItems.menu[$index].ordered = dayItems.menu[$index].ordered + 1"
-                                        ng-class="{disabled:dayItems.menu[$index].ordered > 99}"
+                                        ng-click="dayMenuItem.ordered = dayMenuItem.ordered + 1"
+                                        ng-class="{disabled:dayMenuItem.ordered > 99}"
                                 ><span class="glyphicon glyphicon-plus"></span></a>
-                                {{price}} <small>₴</small>
+                                {{menuPrices[$index]}} <small>₴</small>
                                 <a href="#" role="button"class="btn btn-danger btn-sm" aria-label="Minus"
-                                   ng-click="dayItems.menu[$index].ordered = dayItems.menu[$index].ordered - 1"
-                                   ng-class="{disabled:dayItems.menu[$index].ordered < 1}"
+                                   ng-click="dayMenuItem.ordered = dayMenuItem.ordered - 1"
+                                   ng-class="{disabled:dayMenuItem.ordered < 1}"
                                 ><span class="glyphicon glyphicon-minus"></span></a>
                                 </h2>
                             <ol class="text-info">
-                                <li ng-repeat="itemId in dayItems.menu[$index].items track by $index">
+                                <li ng-repeat="itemId in dayMenuItem.items track by $index">
                                     {{menuItems[$index][itemId]}}
                                     <div class="btn-group pull-right" dropdown is-open="status.isopen">
                                       <button type="button" class="btn btn-default btn-xs dropdown-toggle" dropdown-toggle ng-disabled="disabled">
                                         Изменить <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                        <li><a href="#">Action</a></li>
-                                        <li><a href="#">Another action</a></li>
-                                        <li><a href="#">Something else here</a></li>
-                                        <li><a href="#">Separated link</a></li>
+                                        <li ng-repeat="menuItem in menuItems[$index] track by $index">
+                                            <a href="#" ng-click="dayMenuItem.items[$parent.$index] = $index">{{menuItem}}</a>
+                                        </li>
                                       </ul>
                                     </div>
                                 </li>
