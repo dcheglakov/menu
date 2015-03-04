@@ -6,6 +6,7 @@
         <title>Обеды в Офис</title>
         <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" href="assets/css/menu.css">
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
@@ -13,22 +14,18 @@
     </head>
     <body ng-app="OldCityMenu">
         <div class="container-fluid" ng-controller="WeekMenuCtrl">
-            <carousel>
-                <slide class="row" ng-repeat="dayItems in weekItems">
-                    <div class="menu col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
-                        <h3>{{dayItems.day}} - {{dayItems.date}}</h3>
-                        <div class="col-md-6 col-sm-12 col-xs-12" ng-repeat="price in menuPrices">
-                            <p>
-                                <sup>₴</sup>{{price}} -
-                                <input type="number" min="0" max="100" ng-model="dayItems.menu[$index].ordered" maxlength="2" style="width:50px;" required>
-                            </p>
-                            <ul>
-                                <li ng-repeat="itemId in dayItems.menu[$index].items track by $index">{{menuItems[$index][itemId]}}</li>
-                            </ul>
-                        </div>
+            <div class="row" ng-repeat="dayItems in weekItems">
+                <div class="menu col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                    <h2 class="bg-info">{{dayItems.day}} <small>{{dayItems.date}}</small></h2>
+                    <div class="col-md-6 col-sm-12 col-xs-12 price-list" ng-repeat="price in menuPrices">
+                        <h2 class="bg-warning">{{price}} <small>₴</small></h2>
+                            <!-- <input type="number" min="0" max="100" ng-model="dayItems.menu[$index].ordered" maxlength="2" style="width:50px;" required> -->
+                        <ol class="text-info">
+                            <li ng-repeat="itemId in dayItems.menu[$index].items track by $index">{{menuItems[$index][itemId]}}</li>
+                        </ol>
                     </div>
-                </slide>
-            </carousel>
+                </div>
+            </div>
         </div>
     </body>
 </html>
