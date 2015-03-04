@@ -33,23 +33,38 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       });
 
 
+    $scope.getDayOrderString = function(dayItems){
+      var s = [];
+      angular.forEach($scope.menuPrices, function(value, key)
+      {
+        if(dayItems.menu[key].ordered > 0){
+          s.push([dayItems.menu[key].ordered, ' * ', value].join(''));
+        }
+      });
+      return s.join(' + ');
+    };
+
+    $scope.getDayOrderCost = function(dayItems){
+      var s = 0;
+      angular.forEach($scope.menuPrices, function(value, key)
+      {
+        if(dayItems.menu[key].ordered > 0){
+          s += dayItems.menu[key].ordered * value;
+        }
+      });
+      return s;
+    };
+
+
 
     //google signIn
     $scope.auth = {
       signedIn: false
     };
 
-    // Here we do the authentication processing and error handling.
-    // Note that authResult is a JSON object.
     $scope.processAuth = function(authResult) {
-        // Do a check if authentication has been successful.
         if(authResult['status']['signed_in']) {
-            // Successful sign in.
             $scope.auth.signedIn = true;
-
-            //     ...
-            // Do some work [1].
-            //     ...
         } else if(authResult['error']) {
             // Error while signing in.
             $scope.auth.signedIn = false;
@@ -64,6 +79,7 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
           $scope.getMe();
         });
     };
+
     $scope.renderSignInButton = function() {
       gapi.signin.render('signInButton',
           {
@@ -87,7 +103,7 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
 
        });
       });
-    }
+    };
 
     $scope.renderSignInButton();
 

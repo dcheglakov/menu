@@ -15,26 +15,23 @@
     </head>
     <body ng-app="OldCityMenu">
         <div class="container-fluid" ng-controller="WeekMenuCtrl">
-            <!-- Define controller for body. In this example we use only one controller for the scope of entire body. --><!-- Place a span that is going to act as a container for button rendering through script code. -->
             <span id="googleSignIn" ng-hide="auth.signedIn">
                 <span id="signInButton">
                 </span>
             </span>
             <span ng-show="auth.signedIn">
-                Logged in as {{auth.profile.emails[0].value}}
+                Logged in as {{auth.profile.displayName}}
             </span>
 
-            <!-- Don't forget to place the script that does the asynchronous loading of Google+ JavaScript API.
-                 Because it is loaded asynchronously, it might take some time to load.
-                 Place some loading notification, so user won't get confused.
-                 You can use ng-show and ng-hide to show or hide your notification and accomplish best user experience. --><script>// <![CDATA[
+            <script>// <![CDATA[
                 (function() {
                     var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
                     po.src = 'https://apis.google.com/js/client:platform.js';
                     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
                 })();
 
-    // ]]></script><!-- Second script needed for accessing Google API (gapi.*) . It's usage will be described in controller. --><script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+            // ]]></script>
+            <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
 
 
             <div class="row">
@@ -46,11 +43,16 @@
                         </accordion-heading>
                         <div class="col-12 price-list" ng-repeat="price in menuPrices">
                             <h2 class="bg-warning">
-                                <button type="button" class="btn btn-success btn-sm" aria-label="Plus"><span class="glyphicon glyphicon-plus"></span></button>
-                                </button> {{price}} <small>₴</small>
-                                <button type="button" class="btn btn-danger btn-sm" aria-label="Minus"><span class="glyphicon glyphicon-minus"></span></button>
+                                <a href="#" role="button" class="btn btn-success btn-sm" aria-label="Plus"
+                                        ng-click="dayItems.menu[$index].ordered = dayItems.menu[$index].ordered + 1"
+                                        ng-class="{disabled:dayItems.menu[$index].ordered > 99}"
+                                ><span class="glyphicon glyphicon-plus"></span></a>
+                                {{price}} <small>₴</small>
+                                <a href="#" role="button"class="btn btn-danger btn-sm" aria-label="Minus"
+                                   ng-click="dayItems.menu[$index].ordered = dayItems.menu[$index].ordered - 1"
+                                   ng-class="{disabled:dayItems.menu[$index].ordered < 1}"
+                                ><span class="glyphicon glyphicon-minus"></span></a>
                                 </h2>
-                                <!-- <input type="number" min="0" max="100" ng-model="dayItems.menu[$index].ordered" maxlength="2" style="width:50px;" required> -->
                             <ol class="text-info">
                                 <li ng-repeat="itemId in dayItems.menu[$index].items track by $index">
                                     {{menuItems[$index][itemId]}}
@@ -68,9 +70,12 @@
                                 </li>
                             </ol>
                         </div>
-                        <p class="pull-left bg-info bg-success">2 x 28 + 1 x 30 = 86 ₴</p>
-                        <p class="pull-left bg-success">Ваш заказ принят</p>
-                        <button type="button" class="btn btn-primary pull-right">Заказать</button>
+                        <div ng-show="getDayOrderCost(dayItems) > 0">
+                            <p class="pull-left bg-info bg-success">{{getDayOrderString(dayItems)}} =
+                                {{getDayOrderCost(dayItems)}} ₴</p>
+                            <p class="pull-left bg-success">Ваш заказ принят</p>
+                            <button type="button" class="btn btn-primary pull-right">Заказать</button>
+                        </div>
                     </accordion-group>
                 </accordion>
             </div>
