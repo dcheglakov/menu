@@ -10,10 +10,33 @@
         <link rel="stylesheet" type="text/css" href="assets/css/menu.css">
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
+        <script src="https://apis.google.com/js/plus.js"></script>
         <script src="assets/js/app.js"></script>
     </head>
     <body ng-app="OldCityMenu">
         <div class="container-fluid" ng-controller="WeekMenuCtrl">
+            <!-- Define controller for body. In this example we use only one controller for the scope of entire body. --><!-- Place a span that is going to act as a container for button rendering through script code. -->
+            <span id="googleSignIn" ng-hide="auth.signedIn">
+                <span id="signInButton">
+                </span>
+            </span>
+            <span ng-show="auth.signedIn">
+                Logged in as {{auth.profile.emails[0].value}}
+            </span>
+
+            <!-- Don't forget to place the script that does the asynchronous loading of Google+ JavaScript API.
+                 Because it is loaded asynchronously, it might take some time to load.
+                 Place some loading notification, so user won't get confused.
+                 You can use ng-show and ng-hide to show or hide your notification and accomplish best user experience. --><script>// <![CDATA[
+                (function() {
+                    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                    po.src = 'https://apis.google.com/js/client:platform.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                })();
+
+    // ]]></script><!-- Second script needed for accessing Google API (gapi.*) . It's usage will be described in controller. --><script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+
+
             <div class="row">
                 <accordion class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12"
                         close-others="true">
