@@ -1,6 +1,7 @@
 body {
 	font: 18px 'Ubuntu Condensed', sans-serif;
-	background: rgba(236, 240, 241,1.0);
+	background: #eee;
+	padding: 10px;
 }
 
 h2 {
