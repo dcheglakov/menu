@@ -12,8 +12,11 @@ body {
 ol li{
 	text-align: left;
 	border-bottom: 1px #ddd dotted;
-	margin-right: 25px;
 	padding: 4px 0;
+}
+
+ol li ul li{
+	padding: 0;
 }
 
 ol li:last-child{
