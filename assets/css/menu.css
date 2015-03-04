@@ -4,19 +4,9 @@ body {
 	background: #1e82c0 url('../img/bg.jpg') fixed
 }
 
-h2 {
-	padding: 20px;
-	margin: 0 -15px;
-}
-
 .price-list h2 {
-	margin: 0 -30px 10px;
-	padding: 5px 25px;
-}
-
-ol{
-	margin: 0 -25px;
-	padding-bottom: 20px
+	margin: 0 0 10px;
+	padding: 5px;
 }
 
 ol li{
@@ -28,4 +18,8 @@ ol li{
 
 ol li:last-child{
 	border: none;
+}
+
+.menu p{
+	padding: 7px 20px;
 }

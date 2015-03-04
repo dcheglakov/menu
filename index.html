@@ -20,15 +20,34 @@
                     <accordion-group class="menu" is-open="dayItems.isOpen" ng-repeat="dayItems in weekItems">
                         <accordion-heading>
                             {{dayItems.day}} <small>{{dayItems.date}}</small>
-                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': dayItems.isOpen, 'glyphicon-chevron-right': !dayItems.isOpen}"></i>
                         </accordion-heading>
-                        <div class="col-md-6 col-sm-12 col-xs-12 price-list" ng-repeat="price in menuPrices">
-                            <h2 class="bg-warning">{{price}} <small>₴</small></h2>
+                        <div class="col-12 price-list" ng-repeat="price in menuPrices">
+                            <h2 class="bg-warning">
+                                <button type="button" class="btn btn-success btn-sm" aria-label="Plus"><span class="glyphicon glyphicon-plus"></span></button>
+                                </button> {{price}} <small>₴</small>
+                                <button type="button" class="btn btn-danger btn-sm" aria-label="Minus"><span class="glyphicon glyphicon-minus"></span></button>
+                                </h2>
                                 <!-- <input type="number" min="0" max="100" ng-model="dayItems.menu[$index].ordered" maxlength="2" style="width:50px;" required> -->
                             <ol class="text-info">
-                                <li ng-repeat="itemId in dayItems.menu[$index].items track by $index">{{menuItems[$index][itemId]}}</li>
+                                <li ng-repeat="itemId in dayItems.menu[$index].items track by $index">
+                                    {{menuItems[$index][itemId]}}
+                                    <div class="btn-group pull-right" dropdown is-open="status.isopen">
+                                      <button type="button" class="btn btn-primary btn-xs dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                                        Button dropdown <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                        <li><a href="#">Action</a></li>
+                                        <li><a href="#">Another action</a></li>
+                                        <li><a href="#">Something else here</a></li>
+                                        <li><a href="#">Separated link</a></li>
+                                      </ul>
+                                    </div>
+                                </li>
                             </ol>
                         </div>
+                        <p class="pull-left bg-info bg-success">2 x 28 + 1 x 30 = 86 ₴</p>
+                        <p class="pull-left bg-success">Ваш заказ принят</p>
+                        <button type="button" class="btn btn-primary pull-right">Заказать</button>
                     </accordion-group>
                 </accordion>
             </div>
