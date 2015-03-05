@@ -15,25 +15,27 @@
     </head>
     <body ng-app="OldCityMenu">
         <div class="container-fluid" ng-controller="WeekMenuCtrl">
-            <span id="googleSignIn" ng-hide="auth.signedIn">
-                <span id="signInButton">
-                </span>
-            </span>
-            <span ng-show="auth.signedIn">
-                Logged in as {{auth.profile.displayName}}
-            </span>
+            <div class="row">
+                <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                    <span id="googleSignIn" ng-hide="auth.signedIn">
+                        <span id="signInButton">
+                        </span>
+                    </span>
+                    <span ng-show="auth.signedIn">
+                        Logged in as {{auth.profile.displayName}}
+                    </span>
 
-            <script>// <![CDATA[
-                (function() {
-                    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                    po.src = 'https://apis.google.com/js/client:platform.js';
-                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                })();
+                    <script>// <![CDATA[
+                        (function() {
+                            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                            po.src = 'https://apis.google.com/js/client:platform.js';
+                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                        })();
 
-            // ]]></script>
-            <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
-
-
+                    // ]]></script>
+                    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+                </div>
+            </div>
             <div class="row">
                 <accordion class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12"
                         close-others="true">
@@ -44,12 +46,12 @@
                         <div class="col-12 price-list" ng-repeat="dayMenuItem in dayItems.menu">
                             <h2 class="bg-warning">
                                 <a href="#" role="button" class="btn btn-success btn-sm" aria-label="Plus"
-                                        ng-click="dayMenuItem.ordered = dayMenuItem.ordered + 1"
+                                        ng-click="dayMenuItem.ordered = dayMenuItem.ordered + 1; dayItems.orderSaved = false;"
                                         ng-class="{disabled:dayMenuItem.ordered > 99}"
                                 ><span class="glyphicon glyphicon-plus"></span></a>
                                 {{menuPrices[$index]}} <small>₴</small>
                                 <a href="#" role="button"class="btn btn-danger btn-sm" aria-label="Minus"
-                                   ng-click="dayMenuItem.ordered = dayMenuItem.ordered - 1"
+                                   ng-click="dayMenuItem.ordered = dayMenuItem.ordered - 1; dayItems.orderSaved = false;"
                                    ng-class="{disabled:dayMenuItem.ordered < 1}"
                                 ><span class="glyphicon glyphicon-minus"></span></a>
                                 </h2>
@@ -72,8 +74,8 @@
                         <div ng-show="getDayOrderCost(dayItems) > 0">
                             <p class="pull-left bg-info bg-success">{{getDayOrderString(dayItems)}} =
                                 {{getDayOrderCost(dayItems)}} ₴</p>
-                            <p class="pull-left bg-success">Ваш заказ принят</p>
-                            <button type="button" class="btn btn-primary pull-right">Заказать</button>
+                            <p class="pull-left bg-success" ng-show="dayItems.orderSaved">Ваш заказ принят</p>
+                            <button type="button" class="btn btn-primary pull-right" ng-click="dayItems.orderSaved = true">Заказать</button>
                         </div>
                     </accordion-group>
                 </accordion>
