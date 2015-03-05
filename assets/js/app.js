@@ -12,8 +12,13 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       }
     };
   })
-  .controller("WeekMenuCtrl", function($scope, $http){
-
+  .service('gapiApps', function(){
+    return {
+      'localhost': '745107026144-m21vqtv13v70eabpto9mc8ajqh8p9tec.apps.googleusercontent.com',
+      'dcheglakov.com': '745107026144-mg8hd3coa8gckgh1keoclklqsj77jhou.apps.googleusercontent.com'
+    }
+  })
+  .controller("WeekMenuCtrl", function($scope, $http, $location, gapiApps){
     $scope.weekItems = [];
     $scope.menuItems = [];
     $scope.menuPrices = [];
@@ -92,7 +97,7 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       gapi.signin.render('signInButton',
           {
               'callback': $scope.signInCallback, // Function handling the callback.
-              'clientid': '745107026144-m21vqtv13v70eabpto9mc8ajqh8p9tec.apps.googleusercontent.com', // CLIENT_ID from developer console which has been explained earlier.
+              'clientid': gapiApps[$location.host()], // CLIENT_ID from developer console which has been explained earlier.
               'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
               'cookiepolicy': 'single_host_origin'
           }
