@@ -51,7 +51,7 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
         $scope.menuItems = dicts.data["menu"];
         $scope.menuPrices = dicts.data["prices"];
 
-        $http.get('service.php/menu', {params:{email: $scope.auth.profile.emails[0].value}})
+        $http.get('sample_menu.json')
              .then(function(res){
                 var dayIndex = (new Date()).getDay();
                 $scope.weekItems.length = 0;
