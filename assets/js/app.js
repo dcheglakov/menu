@@ -79,7 +79,7 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
             $scope.getMe();
         } else if(authResult['error']) {
             // Error while signing in.
-            $scope.auth.signedIn = false;
+            //$scope.auth.signedIn = false;
             console.log('Sign-in state: ' + authResult['error']);
             // Report error.
         }
@@ -88,7 +88,6 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
     $scope.signInCallback = function(authResult) {
         $scope.$apply(function() {
           $scope.processAuth(authResult);
-          $scope.getMe();
         });
     };
 
@@ -110,8 +109,10 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
        });
        request.execute(function(resp) {
          $scope.$apply(function(){
-           $scope.auth.signedIn = true;
-           $scope.auth.profile = resp;
+           if(resp['error'] == undefined) {
+             $scope.auth.signedIn = true;
+             $scope.auth.profile = resp;
+           }
          });
 
        });

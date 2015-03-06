@@ -27,6 +27,7 @@
         }
 
         echo json_encode ($days);
+        exit();
     });
 
     $app->post('/menu/:date', function ($date) {
@@ -73,5 +74,5 @@
             echo '<p>Oops! An error occurred. Try sending your message again.</p>';
         }
     }
-    
+
 ?>

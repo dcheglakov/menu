@@ -32,12 +32,13 @@
                     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
                 </div>
             </div>
-            <div ng-show="auth.signedIn && auth.profile">
+            <div ng-show="auth.signedIn">
                 <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
-
+                    <span>Logged in as {{auth.profile.displayName}} ({{auth.profile.emails[0].value}})</span>
+                    <!--<a href="#" role="button" ng-click="logOut()"> SignOut</a>-->
                 </div>
             </div>
-            <div class="row" ng-show="auth.signedIn && auth.profile">
+            <div class="row" ng-show="auth.signedIn">
                 <accordion class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12"
                         close-others="true">
                     <accordion-group class="menu" is-open="dayItems.isOpen" ng-repeat="dayItems in weekItems">
