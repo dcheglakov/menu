@@ -23,29 +23,6 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
     $scope.menuItems = [];
     $scope.menuPrices = [];
 
-    $http.get('menu_items.json')
-       .then(function(dicts){
-        $scope.menuItems = dicts.data["menu"];
-        $scope.menuPrices = dicts.data["prices"];
-
-        $http.get('sample_menu.json')
-             .then(function(res){
-                var dayIndex = (new Date()).getDay();
-                $scope.weekItems.length = 0;
-                angular.extend($scope.weekItems, res.data);
-                $scope.weekItems[dayIndex-1].isOpen = true;
-                var d = new Date();
-                var today = new Date(d.getFullYear(), d.getMonth(), d.getDay());
-
-                angular.forEach($scope.weekItems, function(value, key){
-                  var date = new Date(today);
-                  date.setDate(today.getDate() - today.getDay() + 1 + key);
-                  value.date = [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('.');
-                });
-              });
-      });
-
-
     $scope.getDayOrderString = function(dayItems){
       var s = [];
       angular.forEach($scope.menuPrices, function(value, key)
@@ -68,7 +45,29 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       return s;
     };
 
+    $scope.getWeekMenuItems = function(){
+      $http.get('menu_items.json')
+       .then(function(dicts){
+        $scope.menuItems = dicts.data["menu"];
+        $scope.menuPrices = dicts.data["prices"];
 
+        $http.get('service.php/menu', {params:{email: $scope.auth.profile.emails[0].value}})
+             .then(function(res){
+                var dayIndex = (new Date()).getDay();
+                $scope.weekItems.length = 0;
+                angular.extend($scope.weekItems, res.data);
+                $scope.weekItems[dayIndex-1].isOpen = true;
+                var d = new Date();
+                var today = new Date(d.getFullYear(), d.getMonth(), d.getDay());
+
+                angular.forEach($scope.weekItems, function(value, key){
+                  var date = new Date(today);
+                  date.setDate(today.getDate() - today.getDay() + 1 + key);
+                  value.date = [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('.');
+                });
+              });
+      });
+    }
 
     //google signIn
     $scope.auth = {
@@ -77,7 +76,7 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
 
     $scope.processAuth = function(authResult) {
         if(authResult['status']['signed_in']) {
-            $scope.auth.signedIn = true;
+            $scope.getMe();
         } else if(authResult['error']) {
             // Error while signing in.
             $scope.auth.signedIn = false;
@@ -111,6 +110,7 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
        });
        request.execute(function(resp) {
          $scope.$apply(function(){
+           $scope.auth.signedIn = true;
            $scope.auth.profile = resp;
          });
 
@@ -120,5 +120,11 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
 
     $scope.renderSignInButton();
 
+
+    $scope.$watch('auth.signedIn', function(value){
+      if(value){
+        $scope.getWeekMenuItems();
+      }
+    });
 
   });
