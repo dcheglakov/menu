@@ -32,10 +32,14 @@
                     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
                 </div>
             </div>
-            <div ng-show="auth.signedIn">
+            <div class="row" ng-show="auth.signedIn">
                 <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
-                    <span>Logged in as {{auth.profile.displayName}} ({{auth.profile.emails[0].value}})</span>
-                    <!--<a href="#" role="button" ng-click="logOut()"> SignOut</a>-->
+                    <h4 class="bg-success pull-right user">
+                        <!-- <span class="glyphicon glyphicon-user" aria-hidden="true"></span> -->
+                        <img ng-src="{{auth.profile.image.url}}" class="img-rounded" alt="{{auth.profile.displayName}}"/>
+                        Привет, {{auth.profile.displayName}}<br/>
+                        <small>{{auth.profile.emails[0].value}}</small>
+                    </h4>
                 </div>
             </div>
             <div class="row" ng-show="auth.signedIn">
