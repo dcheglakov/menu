@@ -38,3 +38,11 @@ ol li:last-child{
 	width: 24px;
 	height: 24px;
 }
+
+.center-block {
+	left: 50%;
+	top: 20%;
+	color: #fff;
+	margin-left: -66px;
+	position: absolute;
+}

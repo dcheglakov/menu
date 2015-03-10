@@ -15,22 +15,21 @@
     </head>
     <body ng-app="OldCityMenu">
         <div class="container-fluid" ng-controller="WeekMenuCtrl">
-            <div class="row">
-                <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
-                    <span id="googleSignIn" ng-hide="auth.signedIn">
-                        <span id="signInButton">
-                        </span>
+            <div class="center-block">
+                <p>Хочешь кушать?</p>
+                <span id="googleSignIn" ng-hide="auth.signedIn">
+                    <span id="signInButton">
                     </span>
-                    <script>// <![CDATA[
-                        (function() {
-                            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                            po.src = 'https://apis.google.com/js/client:platform.js';
-                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                        })();
+                </span>
+                <script>// <![CDATA[
+                    (function() {
+                        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                        po.src = 'https://apis.google.com/js/client:platform.js';
+                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                    })();
 
-                    // ]]></script>
-                    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
-                </div>
+                // ]]></script>
+                <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
             </div>
             <div class="row" ng-show="auth.signedIn">
                 <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
