@@ -15,7 +15,8 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
   .service('gapiApps', function(){
     return {
       'localhost': '745107026144-m21vqtv13v70eabpto9mc8ajqh8p9tec.apps.googleusercontent.com',
-      'dcheglakov.com': '745107026144-mg8hd3coa8gckgh1keoclklqsj77jhou.apps.googleusercontent.com'
+      'dcheglakov.com': '745107026144-mg8hd3coa8gckgh1keoclklqsj77jhou.apps.googleusercontent.com',
+      '192.168.1.156' : '745107026144-8bqqkqm4l578fbpbukjp7du6s4mbhg1k.apps.googleusercontent.com'
     }
   })
   .controller("WeekMenuCtrl", function($scope, $http, $location, gapiApps){
