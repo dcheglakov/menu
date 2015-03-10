@@ -36,8 +36,7 @@
                     <h4 class="bg-success pull-right user">
                         <!-- <span class="glyphicon glyphicon-user" aria-hidden="true"></span> -->
                         <img ng-src="{{auth.profile.image.url}}" class="img-rounded" alt="{{auth.profile.displayName}}"/>
-                        Привет, {{auth.profile.displayName}}<br/>
-                        <small>{{auth.profile.emails[0].value}}</small>
+                        Привет, <a href="mailto:{{auth.profile.emails[0].value}}">{{auth.profile.displayName}}</a>
                     </h4>
                 </div>
             </div>
