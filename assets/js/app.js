@@ -114,7 +114,7 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
           {
               'callback': $scope.signInCallback, // Function handling the callback.
               'clientid': gapiApps[$location.host()], // CLIENT_ID from developer console which has been explained earlier.
-              'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email',
+              'scope': 'profile https://www.googleapis.com/auth/userinfo.email',
               'cookiepolicy': 'single_host_origin'
           }
       );
