@@ -26,11 +26,11 @@
 
         $app->get('/menu/{gId}', function ($gId) {
             $monday = new DateTime();
-            $monday->setTimestamp(strtotime('sunday this week'));
+            $monday->setTimestamp(strtotime('monday this week'));
             $days = array_fill(0,5,[]);
 
             foreach($days as $key=>$value){
-                $currDate = $monday -> add(new DateInterval("P1D"))->getTimeStamp();
+                $currDate = $monday -> getTimeStamp();
                 $days[$key]["date"] = $currDate;
                 $days[$key]["day"] = date('l', $currDate);
                 $days[$key]["menu"] = [
@@ -56,7 +56,7 @@
                         "itemId" => $menuItem -> itemId
                     ];
                 }
-
+                $monday -> add(new DateInterval("P1D"));
             }
 
             echo json_encode ($days);
