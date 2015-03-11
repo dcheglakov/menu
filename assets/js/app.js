@@ -19,7 +19,23 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       '192.168.1.156' : '745107026144-8bqqkqm4l578fbpbukjp7du6s4mbhg1k.apps.googleusercontent.com'
     }
   })
-  .controller("WeekMenuCtrl", function($scope, $http, $location, gapiApps){
+  .service('apiSerivce', function($http){
+    var _baseUrl = 'api/service.php?_url=';
+    function getUrl(url){
+      return _baseUrl + url;
+    }
+
+    return {
+      getMenu: function(gId){
+        return $http.get(getUrl('/menu/'+gId));
+      },
+      saveDayMenu: function(gId, id, date, categoryId, priceId, itemId){
+        return $http.post(getUrl(['/menu/', gId].join('')), {id: id, date: date, categoryId: categoryId, priceId: priceId, itemId: itemId});
+      }
+    }
+
+  })
+  .controller("WeekMenuCtrl", function($scope, $http, $location, gapiApps, apiSerivce){
     $scope.weekItems = [];
     $scope.menuItems = [];
     $scope.menuPrices = [];
@@ -52,23 +68,24 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
         $scope.menuItems = dicts.data["menu"];
         $scope.menuPrices = dicts.data["prices"];
 
-        $http.get('sample_menu.json')
+        apiSerivce.getMenu($scope.auth.profile.id)
              .then(function(res){
                 var dayIndex = (new Date()).getDay();
                 $scope.weekItems.length = 0;
                 angular.extend($scope.weekItems, res.data);
                 $scope.weekItems[dayIndex-1].isOpen = true;
-                var d = new Date();
-                var today = new Date(d.getFullYear(), d.getMonth(), d.getDay());
 
                 angular.forEach($scope.weekItems, function(value, key){
-                  var date = new Date(today);
-                  date.setDate(today.getDate() - today.getDay() + 1 + key);
-                  value.date = [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('.');
+                  var date = new Date(value.date*1000);
+                  value.dateStr = date.toLocaleDateString();
                 });
               });
       });
-    }
+    };
+
+    $scope.saveDayMenu = function(id, date, categoryId, priceId, itemId){
+      apiSerivce.saveDayMenu($scope.auth.profile.id, id, date, categoryId, priceId, itemId)
+    };
 
     //google signIn
     $scope.auth = {

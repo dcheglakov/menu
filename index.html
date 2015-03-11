@@ -45,7 +45,8 @@
                         close-others="true">
                     <accordion-group class="menu" is-open="dayItems.isOpen" ng-repeat="dayItems in weekItems">
                         <accordion-heading>
-                            {{dayItems.day}} <small>{{dayItems.date}}</small>
+                            {{dayItems.day}} <small>{{dayItems.dateStr}}</small>
+
                         </accordion-heading>
                         <div class="col-12 price-list" ng-repeat="dayMenuItem in dayItems.menu">
                             <h2 class="bg-warning">
@@ -60,15 +61,15 @@
                                 ><span class="glyphicon glyphicon-minus"></span></a>
                                 </h2>
                             <ol class="text-info">
-                                <li ng-repeat="itemId in dayMenuItem.items track by $index">
-                                    {{menuItems[$index][itemId]}}
+                                <li ng-repeat="item in dayMenuItem.items track by $index">
+                                    {{menuItems[$index][item.itemId]}}
                                     <div class="btn-group pull-right" dropdown is-open="status.isopen">
                                       <button type="button" class="btn btn-default btn-xs dropdown-toggle" dropdown-toggle ng-disabled="disabled">
                                         Изменить <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-right" role="menu">
                                         <li ng-repeat="menuItem in menuItems[$index] track by $index">
-                                            <a href="#" ng-click="dayMenuItem.items[$parent.$index] = $index">{{menuItem}}</a>
+                                            <a href="#" ng-click="dayMenuItem.items[$parent.$index].itemId = $index; saveDayMenu(dayMenuItem.items[$parent.$index].id, dayItems.date, $parent.$index, dayMenuItem.priceId, $index);">{{menuItem}}</a>
                                         </li>
                                       </ul>
                                     </div>
