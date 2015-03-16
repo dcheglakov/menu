@@ -1,37 +1,46 @@
 'use strict';
 
 angular.module("OldCityMenu", ['ui.bootstrap'])
-  .directive("gUserInfo", function ($q) {
+  .service('gUserInfoService', function($q, $timeout){
+    var storage = {};
+    return {
+      get: function (gId) {
+        var deferred = $q.defer();
+        if (gId in storage) {
+          deferred.resolve(storage[gId]);
+        }
+        else {
+          gapi.client.load('plus', 'v1', function () {
+            var request = gapi.client.plus.people.get({
+              'userId': gId
+            });
+            $timeout(function() {
+              request.execute(function (resp) {
+                //$scope.$apply(function(){
+                if (resp['error'] == undefined) {
+                  storage[gId] = resp;
+                  deferred.resolve(resp);
+                }
+                else {
+                  deferred.reject();
+                }
+                //});
+
+              });
+            }, 1000, false);
+          });
+        }
+        return deferred.promise;
+      }
+    }
+  })
+  .directive("gUserInfo", function (gUserInfoService) {
     return {
       templateUrl: "assets/templates/gUserInfo.html",
       restrict: 'EA',
       scope: { id:'@gId'},
       link: function postLink($scope, ngModel) {
-        //$scope.model = $scope.$eval(ngModel.$modelValue);
-
-        function getGUser(id){
-          var deferred = $q.defer();
-          gapi.client.load('plus','v1', function(){
-           var request = gapi.client.plus.people.get({
-             'userId': id
-           });
-           request.execute(function(resp) {
-             //$scope.$apply(function(){
-               if(resp['error'] == undefined) {
-                 deferred.resolve(resp);
-               }
-               else
-               {
-                 deferred.reject();
-               }
-             //});
-
-           });
-          });
-          return deferred.promise;
-        };
-
-        getGUser($scope.id).then(function(data){
+        gUserInfoService.get($scope.id).then(function(data){
           $scope.model = data;
         });
       }
@@ -63,7 +72,7 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
     }
 
   })
-  .controller("WeekMenuCtrl", function($scope, $http, $location, gapiApps, apiSerivce){
+  .controller("WeekMenuCtrl", function($scope, $http, $location, gapiApps, apiSerivce, gUserInfoService){
     $scope.weekItems = [];
     $scope.menuItems = [];
     $scope.menuPrices = [];
@@ -207,20 +216,13 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
     };
 
     $scope.getMe = function(){
-      gapi.client.load('plus','v1', function(){
-       var request = gapi.client.plus.people.get({
-         'userId': 'me'
-       });
-       request.execute(function(resp) {
-         $scope.$apply(function(){
+      gUserInfoService.get('me').then(function(resp) {
            if(resp['error'] == undefined) {
              $scope.auth.signedIn = true;
              $scope.auth.profile = resp;
            }
-         });
 
        });
-      });
     };
 
     $scope.renderSignInButton();
