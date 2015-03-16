@@ -83,7 +83,7 @@
                             "processedById" => $order -> processedById
                         ];
                     }
-                    $allOrders[$order -> userId]["orders"][$order -> priceId] = $order -> quantity;
+                    $allOrders[$order -> userId]["orders"][$order -> priceId] = (int)$order -> quantity;
                 };
 
                 if($allOrders){
@@ -140,7 +140,7 @@
                         "processedById" => $order -> processedById
                     ];
                 }
-                $allOrders[$order -> userId]["orders"][$order -> priceId] = $order -> quantity;
+                $allOrders[$order -> userId]["orders"][$order -> priceId] = (int) $order -> quantity;
             };
             $result = $allOrders;
             echo json_encode($result);

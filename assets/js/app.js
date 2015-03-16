@@ -135,6 +135,28 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       return s;
     };
 
+    $scope.getTotalDayOrderString = function(userOrders){
+      var prices = [];
+      var s = [];
+      angular.forEach(userOrders, function(userOrder, userId)
+      {
+        angular.forEach(userOrder.orders, function(quantity, priceId) {
+          if (quantity > 0) {
+            if(!(priceId in prices)){
+              prices[priceId] = quantity;
+            }
+            else{
+              prices[priceId] += quantity;
+            }
+          }
+        });
+      });
+      angular.forEach(prices, function(quantity, priceId){
+        s.push([quantity, ' * ', $scope.menuPrices[priceId]].join(''));
+      });
+      return s.join(' + ');
+    };
+
     $scope.getWeekMenuItems = function(){
       $http.get('menu_items.json')
        .then(function(dicts){

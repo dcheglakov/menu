@@ -15,7 +15,7 @@
     </head>
     <body ng-app="OldCityMenu">
         <div class="container-fluid" ng-controller="WeekMenuCtrl">
-            <div class="center-block">
+            <div class="center-block"  ng-hide="auth.signedIn">
                 <p>Хочешь кушать?</p>
                 <span id="googleSignIn" ng-hide="auth.signedIn">
                     <span id="signInButton">
@@ -94,7 +94,7 @@
                                     <accordion-heading>
                                         <span class="clearfix">
                                             <span class="pull-left">Все заказы</span>
-                                            <span class="pull-right">Сумма {{getTotalDayOrderCost(dayItems.orders)}}₴</span>
+                                            <span class="pull-right">Сумма {{getTotalDayOrderString(dayItems.orders)}} = {{getTotalDayOrderCost(dayItems.orders)}}₴</span>
                                         </span>
                                     </accordion-heading>
                                     <div ng-repeat="(userId, userOrders) in dayItems.orders" class="clearfix">
