@@ -1,14 +1,39 @@
 'use strict';
 
 angular.module("OldCityMenu", ['ui.bootstrap'])
-  .directive("itemsNumberPicker", function () {
+  .directive("gUserInfo", function ($q) {
     return {
-      templateUrl: "assets/templates/itemsNumberPicker.html",
+      templateUrl: "assets/templates/gUserInfo.html",
       restrict: 'EA',
-      require: '?ngModel',
-      scope: {},
+      scope: { id:'@gId'},
       link: function postLink($scope, ngModel) {
-        $scope.model = $scope.$eval(ngModel.$modelValue);
+        //$scope.model = $scope.$eval(ngModel.$modelValue);
+
+        function getGUser(id){
+          var deferred = $q.defer();
+          gapi.client.load('plus','v1', function(){
+           var request = gapi.client.plus.people.get({
+             'userId': id
+           });
+           request.execute(function(resp) {
+             //$scope.$apply(function(){
+               if(resp['error'] == undefined) {
+                 deferred.resolve(resp);
+               }
+               else
+               {
+                 deferred.reject();
+               }
+             //});
+
+           });
+          });
+          return deferred.promise;
+        };
+
+        getGUser($scope.id).then(function(data){
+          $scope.model = data;
+        });
       }
     };
   })
@@ -31,6 +56,9 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       },
       saveDayMenu: function(gId, id, date, categoryId, priceId, itemId){
         return $http.post(getUrl(['/menu/', gId].join('')), {id: id, date: date, categoryId: categoryId, priceId: priceId, itemId: itemId});
+      },
+      saveOrder: function(date, orders){
+        return $http.post(getUrl(['/order/', date].join('')), orders);
       }
     }
 
@@ -44,8 +72,19 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       var s = [];
       angular.forEach($scope.menuPrices, function(value, key)
       {
-        if(dayItems.menu[key].ordered > 0){
-          s.push([dayItems.menu[key].ordered, ' * ', value].join(''));
+        if(dayItems.menu[key].order.quantity > 0){
+          s.push([dayItems.menu[key].order.quantity, ' * ', value].join(''));
+        }
+      });
+      return s.join(' + ');
+    };
+
+    $scope.getOrderString = function(userOrders){
+      var s = [];
+      angular.forEach($scope.menuPrices, function(value, key)
+      {
+        if(userOrders[key] > 0){
+          s.push([userOrders[key], ' * ', value].join(''));
         }
       });
       return s.join(' + ');
@@ -55,9 +94,34 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       var s = 0;
       angular.forEach($scope.menuPrices, function(value, key)
       {
-        if(dayItems.menu[key].ordered > 0){
-          s += dayItems.menu[key].ordered * value;
+        if(dayItems.menu[key].order.quantity > 0){
+          s += dayItems.menu[key].order.quantity * value;
         }
+      });
+      return s;
+    };
+
+    $scope.getUserOrderCost = function(userOrders){
+      var s = 0;
+      angular.forEach($scope.menuPrices, function(value, key)
+      {
+        if(userOrders[key] > 0){
+          s += userOrders[key] * value;
+        }
+      });
+      return s;
+    };
+
+    $scope.getTotalDayOrderCost = function(userOrders){
+      var s = 0;
+
+      angular.forEach(userOrders, function(userOrder, userId)
+      {
+        angular.forEach(userOrder.orders, function(quantity, priceId) {
+          if (quantity > 0) {
+            s += quantity * $scope.menuPrices[priceId];
+          }
+        });
       });
       return s;
     };
@@ -80,6 +144,23 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
                   value.dateStr = date.toLocaleDateString();
                 });
               });
+      });
+    };
+
+    $scope.updateOrder = function(dayItems){
+      var orders = [];
+      angular.forEach(dayItems.menu, function(value, key){
+        var order = {};
+        order.id = value.order.id;
+        order.date = dayItems.date;
+        order.priceId = value.priceId;
+        order.userId = $scope.auth.profile.id;
+        order.quantity = value.order.quantity;
+        orders.push(order);
+      });
+      apiSerivce.saveOrder(dayItems.date, orders).then(function(resp){
+        dayItems.orderSaved = true;
+        angular.extend(dayItems.orders, resp.data);
       });
     };
 

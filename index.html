@@ -46,18 +46,17 @@
                     <accordion-group class="menu" is-open="dayItems.isOpen" ng-repeat="dayItems in weekItems">
                         <accordion-heading>
                             {{dayItems.day}} <small>{{dayItems.dateStr}}</small>
-
                         </accordion-heading>
                         <div class="col-12 price-list" ng-repeat="dayMenuItem in dayItems.menu">
                             <h2 class="bg-warning">
                                 <a href="#" role="button" class="btn btn-success btn-sm" aria-label="Plus"
-                                        ng-click="dayMenuItem.ordered = dayMenuItem.ordered + 1; dayItems.orderSaved = false;"
-                                        ng-class="{disabled:dayMenuItem.ordered > 99}"
+                                        ng-click="dayMenuItem.order.quantity = dayMenuItem.order.quantity + 1; dayItems.orderSaved = false; dayMenuItem.order.processedById = null;"
+                                        ng-class="{disabled:dayMenuItem.order.quantity > 99}"
                                 ><span class="glyphicon glyphicon-plus"></span></a>
                                 {{menuPrices[$index]}} <small>₴</small>
                                 <a href="#" role="button"class="btn btn-danger btn-sm" aria-label="Minus"
-                                   ng-click="dayMenuItem.ordered = dayMenuItem.ordered - 1; dayItems.orderSaved = false;"
-                                   ng-class="{disabled:dayMenuItem.ordered < 1}"
+                                   ng-click="dayMenuItem.order.quantity = dayMenuItem.order.quantity - 1; dayItems.orderSaved = false; dayMenuItem.order.processedById = null;"
+                                   ng-class="{disabled:dayMenuItem.order.quantity < 1}"
                                 ><span class="glyphicon glyphicon-minus"></span></a>
                                 </h2>
                             <ol class="text-info">
@@ -76,11 +75,28 @@
                                 </li>
                             </ol>
                         </div>
-                        <div ng-show="getDayOrderCost(dayItems) > 0">
+                        <div ng-show="getDayOrderCost(dayItems) > 0" class="clearfix">
                             <p class="pull-left bg-info bg-success">{{getDayOrderString(dayItems)}} =
                                 {{getDayOrderCost(dayItems)}} ₴</p>
                             <p class="pull-left bg-success" ng-show="dayItems.orderSaved">Ваш заказ принят</p>
-                            <button type="button" class="btn btn-primary pull-right" ng-click="dayItems.orderSaved = true">Заказать</button>
+                            <p class="pull-left bg-success" ng-show="">Ваш заказ обработан</p>
+                            <button type="button" class="btn btn-primary pull-right" ng-click="updateOrder(dayItems)">Заказать</button>
+                        </div>
+                        <div ng-show="dayItems.orders" class="clearfix">
+                            <accordion>
+                                <accordion-group is-open="false">
+                                    <accordion-heading>
+                                        <span class="clearfix">
+                                            <span class="pull-left">Все заказы</span>
+                                            <span class="pull-right">Сумма {{getTotalDayOrderCost(dayItems.orders)}}₴</span>
+                                        </span>
+                                    </accordion-heading>
+                                    <div ng-repeat="(userId, userOrders) in dayItems.orders" class="clearfix">
+                                        <span class="pull-left"><g-user-info g-id="{{userId}}"></g-user-info></span>
+                                        <span class="pull-right">{{getOrderString(userOrders.orders)}} = {{getUserOrderCost(userOrders.orders)}}₴</span>
+                                    </div>
+                                </accordion-group>
+                            </accordion>
                         </div>
                     </accordion-group>
                 </accordion>

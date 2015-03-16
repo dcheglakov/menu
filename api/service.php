@@ -2,10 +2,8 @@
 //    Register an autoloader
     $loader = new \Phalcon\Loader();
 
-    class MenuItems extends \Phalcon\Mvc\Model
-    {
-
-    }
+    class MenuItems extends \Phalcon\Mvc\Model{}
+    class Orders extends \Phalcon\Mvc\Model{}
 
     //Create a DI
     try{
@@ -33,16 +31,17 @@
                 $currDate = $monday -> getTimeStamp();
                 $days[$key]["date"] = $currDate;
                 $days[$key]["day"] = date('l', $currDate);
+                $days[$key]['orders'] = Null;
                 $days[$key]["menu"] = [
                     [
                         "priceId" => 0,
                         "items" => [Null,Null,Null,Null],
-                        "ordered" => 0
+                        "order" => ["quantity" => 0]
                     ],
                     [
                         "priceId" => 1,
                         "items" => [Null,Null,Null,Null],
-                        "ordered" => 0
+                        "order" => ["quantity" => 0]
                     ]
                 ];
                 $menuItems = MenuItems::find(array(
@@ -55,7 +54,41 @@
                         "id" => $menuItem -> id,
                         "itemId" => $menuItem -> itemId
                     ];
+                };
+
+                $myOrders = Orders::find(array(
+                    "conditions" => "date ='$currDate' AND userId ='$gId'"
+                ));
+
+                foreach($myOrders as $order){
+                    $days[$key]["menu"][$order -> priceId]["order"] = [
+                        "id" => $order -> id,
+                        "quantity" => (int)$order -> quantity,
+                        "processedById" => $order -> processedById
+                    ];
+
+                };
+
+                $orders = Orders::find(array(
+                    "conditions" => "date ='$currDate' AND quantity > 0"
+                ));
+
+                $allOrders = [];
+
+                foreach($orders as $order){
+                    if(!array_key_exists($order -> userId, $allOrders)){
+                        $allOrders[$order -> userId] = [
+                            "orders" => [],
+                            "processedById" => $order -> processedById
+                        ];
+                    }
+                    $allOrders[$order -> userId]["orders"][$order -> priceId] = $order -> quantity;
+                };
+
+                if($allOrders){
+                    $days[$key]["orders"] = $allOrders;
                 }
+
                 $monday -> add(new DateInterval("P1D"));
             }
 
@@ -79,8 +112,37 @@
 
         });
 
-        $app->post('/order/{date}/{gId}', function ($date, $gId) {
+        $app->post('/order/{date}', function ($date) {
+            $post = (array) json_decode(file_get_contents("php://input"));
 
+            foreach($post as $price){
+                $order = new Orders();
+                $data = (array) $price;
+                if(array_key_exists('id', $price)){
+                    $order->update($data, array('id', 'userId', 'date', 'priceId', 'quantity', 'processedById'));
+                }
+                else if($data['quantity'] > 0)
+                {
+                    $order->save($data, array('id', 'userId', 'date', 'priceId', 'quantity', 'processedById'));
+                }
+            }
+
+            $allOrders = [];
+
+            $orders = Orders::find(array(
+                "conditions" => "date ='$date' AND quantity > 0"
+            ));
+            foreach($orders as $order){
+                if(!array_key_exists($order -> userId, $allOrders)){
+                    $allOrders[$order -> userId] = [
+                        "orders" => [],
+                        "processedById" => $order -> processedById
+                    ];
+                }
+                $allOrders[$order -> userId]["orders"][$order -> priceId] = $order -> quantity;
+            };
+
+            echo json_encode($allOrders);
         });
 
         $app->handle();
