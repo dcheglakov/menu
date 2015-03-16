@@ -31,7 +31,8 @@
                 $currDate = $monday -> getTimeStamp();
                 $days[$key]["date"] = $currDate;
                 $days[$key]["day"] = date('l', $currDate);
-                $days[$key]['orders'] = Null;
+                $days[$key]["orders"] = new stdClass;
+                $days[$key]["orderSaved"] = true;
                 $days[$key]["menu"] = [
                     [
                         "priceId" => 0,
@@ -126,7 +127,7 @@
                     $order->save($data, array('id', 'userId', 'date', 'priceId', 'quantity', 'processedById'));
                 }
             }
-
+            $result = new stdClass;
             $allOrders = [];
 
             $orders = Orders::find(array(
@@ -141,8 +142,8 @@
                 }
                 $allOrders[$order -> userId]["orders"][$order -> priceId] = $order -> quantity;
             };
-
-            echo json_encode($allOrders);
+            $result = $allOrders;
+            echo json_encode($result);
         });
 
         $app->handle();

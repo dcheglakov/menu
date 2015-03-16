@@ -83,7 +83,7 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       var s = [];
       angular.forEach($scope.menuPrices, function(value, key)
       {
-        if(userOrders[key] > 0){
+        if(key in userOrders && userOrders[key] > 0){
           s.push([userOrders[key], ' * ', value].join(''));
         }
       });
@@ -160,6 +160,11 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       });
       apiSerivce.saveOrder(dayItems.date, orders).then(function(resp){
         dayItems.orderSaved = true;
+        for (var prop in dayItems.orders) {
+          if(!(prop in resp.data)){
+            delete dayItems.orders[prop];
+          }
+        }
         angular.extend(dayItems.orders, resp.data);
       });
     };

@@ -8,7 +8,7 @@
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" href="assets/css/menu.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.5/angular.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.0/ui-bootstrap-tpls.min.js"></script>
         <script src="https://apis.google.com/js/plus.js"></script>
         <script src="assets/js/app.js"></script>
@@ -75,14 +75,20 @@
                                 </li>
                             </ol>
                         </div>
-                        <div ng-show="getDayOrderCost(dayItems) > 0" class="clearfix">
-                            <p class="pull-left bg-info bg-success">{{getDayOrderString(dayItems)}} =
-                                {{getDayOrderCost(dayItems)}} ₴</p>
+                        <div ng-show="getDayOrderCost(dayItems) > 0 || !dayItems.orderSaved" class="clearfix">
+                            <span ng-show="getDayOrderCost(dayItems) >0">
+                                <p class="pull-left bg-info bg-success">{{getDayOrderString(dayItems)}} =
+                                    {{getDayOrderCost(dayItems)}} ₴</p>
+                            </span>
+                            <span ng-hide="getDayOrderCost(dayItems) >0">
+                                <p class="pull-left bg-info bg-success">Остаться без обеда</p>
+                            </span>
                             <p class="pull-left bg-success" ng-show="dayItems.orderSaved">Ваш заказ принят</p>
                             <p class="pull-left bg-success" ng-show="">Ваш заказ обработан</p>
-                            <button type="button" class="btn btn-primary pull-right" ng-click="updateOrder(dayItems)">Заказать</button>
+                            <button type="button" class="btn btn-primary pull-right" ng-show="getDayOrderCost(dayItems) >0 && !dayItems.orderSaved" ng-click="updateOrder(dayItems)">Заказать</button>
+                            <button type="button" class="btn btn-primary pull-right" ng-hide="getDayOrderCost(dayItems) >0 || dayItems.orderSaved" ng-click="updateOrder(dayItems)">Увы, но да</button>
                         </div>
-                        <div ng-show="dayItems.orders" class="clearfix">
+                        <div ng-show="getTotalDayOrderCost(dayItems.orders)>0" class="clearfix">
                             <accordion>
                                 <accordion-group is-open="false">
                                     <accordion-heading>
