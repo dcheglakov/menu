@@ -46,3 +46,7 @@ ol li:last-child{
 	margin-left: -66px;
 	position: absolute;
 }
+
+.weeks{
+	margin: 10px 0
+}

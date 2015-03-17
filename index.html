@@ -33,8 +33,18 @@
             </div>
             <div class="row" ng-show="auth.signedIn">
                 <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                    <div class="btn-group pull-left weeks" role="group" aria-label="...">
+                      <a href="#?admin=1" type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                      </a>
+                      <a href="#?admin=1&shiftWeeks=1" type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                      </a>
+                      <a href="#" type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                      </a>                      
+                    </div>
                     <h4 class="bg-success pull-right user">
-                        <!-- <span class="glyphicon glyphicon-user" aria-hidden="true"></span> -->
                         <img ng-src="{{auth.profile.image.url}}" class="img-rounded" alt="{{auth.profile.displayName}}"/>
                         Привет, <a href="mailto:{{auth.profile.emails[0].value}}">{{auth.profile.displayName}}</a>
                     </h4>
