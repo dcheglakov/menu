@@ -201,16 +201,21 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       apiSerivce.saveOrder(dayItems.date, orders).then(function(resp){
         dayItems.orderSaved = true;
         for (var prop in dayItems.orders) {
-          if(!(prop in resp.data)){
+          if(!(prop in resp.data.allOrders)){
             delete dayItems.orders[prop];
           }
         }
-        angular.extend(dayItems.orders, resp.data);
+        angular.forEach(dayItems.menu, function(value, key) {
+          value.order.id = resp.data.myOrders[key];
+        });
+        angular.extend(dayItems.orders, resp.data.allOrders);
       });
     };
 
-    $scope.saveDayMenu = function(id, date, categoryId, priceId, itemId){
-      apiSerivce.saveDayMenu($scope.auth.profile.id, id, date, categoryId, priceId, itemId)
+    $scope.saveDayMenu = function(dayMenu, date, categoryId, priceId, itemId){
+      apiSerivce.saveDayMenu($scope.auth.profile.id, dayMenu.id, date, categoryId, priceId, itemId).then(function(data){
+        dayMenu.id = data.data;
+      });
     };
 
     //google signIn

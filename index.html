@@ -78,7 +78,7 @@
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-right" role="menu">
                                         <li ng-repeat="menuItem in menuItems[$index] track by $index">
-                                            <a href="#" ng-click="dayMenuItem.items[$parent.$index].itemId = $index; saveDayMenu(dayMenuItem.items[$parent.$index].id, dayItems.date, $parent.$index, dayMenuItem.priceId, $index);">{{menuItem}}</a>
+                                            <a href="#" ng-click="dayMenuItem.items[$parent.$index].itemId = $index; saveDayMenu(dayMenuItem.items[$parent.$index], dayItems.date, $parent.$index, dayMenuItem.priceId, $index);">{{menuItem}}</a>
                                         </li>
                                       </ul>
                                     </div>

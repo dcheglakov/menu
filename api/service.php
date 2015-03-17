@@ -103,30 +103,22 @@
             $post = (array) json_decode(file_get_contents("php://input"));
 
             $menuItem = new MenuItems();
-            if(array_key_exists('id', $post)){
-                $menuItem->update($post, array('id', 'date', 'categoryId', 'priceId', 'itemId'));
-            }
-            else
-            {
-                $menuItem->save($post, array('id', 'date', 'categoryId', 'priceId', 'itemId'));
-            }
+            $menuItem->save($post, array('id', 'date', 'categoryId', 'priceId', 'itemId'));
 
-            print_r($menuItem->getMessages());
+            echo json_encode((int)$menuItem -> id);
 
         });
 
         $app->post('/order/{date}', function ($date) {
             $post = (array) json_decode(file_get_contents("php://input"));
-
+            $myOrders = [];
             foreach($post as $price){
                 $order = new Orders();
                 $data = (array) $price;
-                if(array_key_exists('id', $price)){
-                    $order->update($data, array('id', 'userId', 'date', 'priceId', 'quantity', 'processedById'));
-                }
-                else if($data['quantity'] > 0)
+                if(array_key_exists('id', $price) || $data['quantity'] > 0)
                 {
                     $order->save($data, array('id', 'userId', 'date', 'priceId', 'quantity', 'processedById'));
+                    $myOrders[(int)$data["priceId"]] = $order -> id;
                 }
             }
             $result = new stdClass;
@@ -145,7 +137,10 @@
                 $allOrders[$order -> userId]["orders"][$order -> priceId] = (int) $order -> quantity;
             };
             $result = $allOrders;
-            echo json_encode($result);
+            echo json_encode([
+                "myOrders" => $myOrders,
+                "allOrders" => $result
+                ]);
         });
 
         $app->handle();
