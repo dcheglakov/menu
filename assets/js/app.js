@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module("OldCityMenu", ['ui.bootstrap'])
-  .service('gUserInfoService', function($q, $timeout){
+  .service('gUserInfoService', function($q, $interval){
     var storage = {};
     return {
       get: function (gId) {
@@ -14,20 +14,24 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
             var request = gapi.client.plus.people.get({
               'userId': gId
             });
-            $timeout(function() {
+             var callCount = 0;
+            var interval =
+            $interval(function() {
+              callCount++;
               request.execute(function (resp) {
                 //$scope.$apply(function(){
                 if (resp['error'] == undefined) {
                   storage[gId] = resp;
                   deferred.resolve(resp);
+                  $interval.cancel(interval);
                 }
-                else {
+                else if(callCount >= 5) {
                   deferred.reject();
                 }
                 //});
 
               });
-            }, 1000, false);
+            }, 1000, 5);
           });
         }
         return deferred.promise;
@@ -40,8 +44,10 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
       restrict: 'EA',
       scope: { id:'@gId'},
       link: function postLink($scope, ngModel) {
-        gUserInfoService.get($scope.id).then(function(data){
-          $scope.model = data;
+        $scope.$watch('id', function(id) {
+          gUserInfoService.get(id).then(function (data) {
+            $scope.model = data;
+          });
         });
       }
     };
