@@ -60,8 +60,8 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
     }
 
     return {
-      getMenu: function(gId){
-        return $http.get(getUrl('/menu/'+gId));
+      getMenu: function(gId, shiftWeeks){
+        return $http.get(getUrl('/menu/'+gId), {params:{shiftWeeks: shiftWeeks}});
       },
       saveDayMenu: function(gId, id, date, categoryId, priceId, itemId){
         return $http.post(getUrl(['/menu/', gId].join('')), {id: id, date: date, categoryId: categoryId, priceId: priceId, itemId: itemId});
@@ -73,6 +73,9 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
 
   })
   .controller("WeekMenuCtrl", function($scope, $http, $location, gapiApps, apiSerivce, gUserInfoService){
+    //$scope.urlParams = $location.search();
+    $scope.adminMode = $location.search()['admin'] == "1";
+    $scope.shiftWeeks = $location.search()['shiftWeeks']? parseInt($location.search()['shiftWeeks']): 0;
     $scope.weekItems = [];
     $scope.menuItems = [];
     $scope.menuPrices = [];
@@ -163,7 +166,7 @@ angular.module("OldCityMenu", ['ui.bootstrap'])
         $scope.menuItems = dicts.data["menu"];
         $scope.menuPrices = dicts.data["prices"];
 
-        apiSerivce.getMenu($scope.auth.profile.id)
+        apiSerivce.getMenu($scope.auth.profile.id, $scope.shiftWeeks)
              .then(function(res){
                 var dayIndex = (new Date()).getDay();
                 $scope.weekItems.length = 0;

@@ -22,9 +22,11 @@
 
         $app = new \Phalcon\Mvc\Micro($di);
 
-        $app->get('/menu/{gId}', function ($gId) {
+        $app->get('/menu/{gId}', function ($gId) use ($app) {
+            $shiftWeeks = (int)$_GET["shiftWeeks"];
             $monday = new DateTime();
             $monday->setTimestamp(strtotime('monday this week'));
+            $monday -> add(new DateInterval("P".$shiftWeeks."W"));
             $days = array_fill(0,5,[]);
 
             foreach($days as $key=>$value){

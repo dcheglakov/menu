@@ -62,7 +62,7 @@
                             <ol class="text-info">
                                 <li ng-repeat="item in dayMenuItem.items track by $index">
                                     {{menuItems[$index][item.itemId]}}
-                                    <div class="btn-group pull-right" dropdown is-open="status.isopen">
+                                    <div class="btn-group pull-right" dropdown is-open="status.isopen" ng-show="adminMode">
                                       <button type="button" class="btn btn-default btn-xs dropdown-toggle" dropdown-toggle ng-disabled="disabled">
                                         Изменить <span class="caret"></span>
                                       </button>
